@@ -1,8 +1,19 @@
-# Clear variables for repeatability
+# Clear session variables for repeatability
 Get-Variable -Exclude PWD,*Preference | Remove-Variable -EA 0
 
-<# Update-EnvironmentVariables Function 
+<# Set-EnvironmentVariable Function
 (can be used to nullify environment variables) #>
+Function Set-EnvironmentVariable {
+    param (
+        $Name,
+        $Value
+    )
+    [System.Environment]::SetEnvironmentVariable($Name,$Value,[System.EnvironmentVariableTarget]::Machine)
+    [System.Environment]::SetEnvironmentVariable($Name,$Value,[System.EnvironmentVariableTarget]::User)
+    [System.Environment]::SetEnvironmentVariable($Name,$Value,[System.EnvironmentVariableTarget]::Process)
+} # End of Set-EnvironmentVariable Function
+
+# Update-EnvironmentVariables Function 
 Function Update-EnvironmentVariables {
     # Clear nullified environment variables
     $machineValues = [Environment]::GetEnvironmentVariables('Machine')
@@ -20,5 +31,8 @@ Function Update-EnvironmentVariables {
     }
 } # End of Update-EnvironmentVariables Function
 
-# Nullify environment variables
+# Nullify environment variable
 Set-EnvironmentVariable -Name "<ENV_VARIABLE>" -Value "$null"
+
+# Refresh environment variables
+Update-EnvironmentVariables
