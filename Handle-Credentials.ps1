@@ -2,7 +2,7 @@
 $Credential = Get-Credential
 
 # get username
-$UserName = $Credential.UserName
+$userName = $Credential.UserName
 
 # get password as secure string
 $securePass = $Credential.GetNetworkCredential().SecurePassword
