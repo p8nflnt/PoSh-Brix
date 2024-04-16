@@ -5,6 +5,9 @@ netsh wlan show profile
 netsh wlan show profile name= "<INSERT SSID>" key=clear
 
 # display all SSID/key pairs, minified
-(netsh wlan show profiles) | Select-String "All User Profile\s+:\s+(.+)" | ForEach-Object {$ssid = $_.Matches.Groups[1].Value
-$key = (netsh wlan show profile name="$ssid" key=clear | Select-String "Key Content\s+:\s+(.+)").Matches.Groups[1].Value
-"SSID: $ssid`nKey:  $key`n-------------------------"}
+(netsh wlan show profiles) | Select-String "\s+:\s+(.+)" | ForEach-Object {
+    $key, $ssid = $null
+    $ssid = $_.Matches.Groups[1].Value
+    $key = (netsh wlan show profile name="$ssid" key=clear | Select-String "nt\s+:\s+(.+)").Matches.Groups[1].Value
+    "SSID: $ssid`nKey: $key`n-------------------------"
+} 2>$null
